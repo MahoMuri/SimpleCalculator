@@ -321,6 +321,21 @@ namespace Simple_Calculator
                 if (UtilityDisplay.Text.Length > 0 && result == 0)
                 {
                     initResult = Calculate(UtilityDisplay.Text.Replace('=', '/') + MainDisplay.Text);
+
+                    if (Double.IsInfinity(initResult))
+                    {
+                        MainDisplay.Text = "Can't divide by zero";
+                        ToggleButtons(false);
+                        return;
+                    }
+
+                    if (initResult.ToString() == "NaN")
+                    {
+                        MainDisplay.Text = "NaN";
+                        ToggleButtons(false);
+                        return;
+                    }
+
                     UtilityDisplay.Text = initResult.ToString() + " ÷ ";
                     MainDisplay.Text = initResult.ToString();
                 }
@@ -410,7 +425,9 @@ namespace Simple_Calculator
         // =========================================================
         private double Calculate(string expression)
         {
-            return Double.Parse(dt.Compute(expression.Replace('×', '*').Replace('÷', '/'), "").ToString());
+            double result = Double.Parse(dt.Compute(expression.Replace('×', '*').Replace('÷', '/'), "").ToString());
+            
+            return result;
         }
 
         private void Clear()
