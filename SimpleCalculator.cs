@@ -28,6 +28,7 @@ namespace Simple_Calculator
         {
             UtilityDisplay.Text = null;
             MainDisplay.Text = "0";
+            MainDisplay.Select();
         }
 
         // First Row
@@ -184,6 +185,7 @@ namespace Simple_Calculator
             if (!hasDecimal)
             {
                 MainDisplay.Text += ".";
+                MainDisplay.Select(MainDisplay.TextLength, 0);
                 hasDecimal = true;
             }
         }
@@ -203,20 +205,15 @@ namespace Simple_Calculator
             operation = stringArr[1];
             num2 = stringArr[2];
 
+            if (operation == "÷" && num2 == "0")
+            {
+                MainDisplay.Text = "Can't divide by zero";
+                ToggleButtons(false);
+                return;
+            }
 
             expression = result == 0 ? num1 + " " + operation + " " + num2 : result.ToString() + " " + operation + " " + num2;
             result = Calculate(expression);
-            if (result == Double.PositiveInfinity)
-            {
-                MainDisplay.Text = "Cannot divide by zero";
-                return;
-            }
-
-            if (result == Double.NaN)
-            {
-                MainDisplay.Text = "NaN";
-                return;
-            }
 
             UtilityDisplay.Text = expression + " =";
             MainDisplay.Text = result.ToString();
@@ -351,6 +348,7 @@ namespace Simple_Calculator
         // Misc. 
         private void ClearButton_Click(object sender, EventArgs e)
         {
+            ToggleButtons(true);
             MainDisplay.Text = "0";
             UtilityDisplay.Text = null;
             hasDecimal = false;
@@ -358,6 +356,9 @@ namespace Simple_Calculator
             result = 0;
         }
 
+        // =========================================================
+        //                    Methods for Keypad
+        // =========================================================
         private void MainDisplay_KeyPress(object sender, KeyPressEventArgs e)
         {
             // If the pressed character is not a number, do nothing
@@ -404,13 +405,9 @@ namespace Simple_Calculator
             }
         }
 
-
-        private void UtilityDisplay_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        // Method for Calculating the expression
+        // =========================================================
+        //                    Private Methods
+        // =========================================================
         private double Calculate(string expression)
         {
             return Double.Parse(dt.Compute(expression.Replace('×', '*').Replace('÷', '/'), "").ToString());
@@ -422,6 +419,18 @@ namespace Simple_Calculator
             MainDisplay.Text = null;
             result = 0;
             hasResult = false;
+        }
+
+        private void ToggleButtons(bool toggle)
+        {
+            foreach (Control btn in CalculatorControls.Controls)
+            {
+                if (btn.Text != "C")
+                {
+                    btn.Enabled = toggle;
+
+                }
+            }
         }
 
     }

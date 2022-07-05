@@ -277,7 +277,6 @@
             this.UtilityDisplay.TabIndex = 3;
             this.UtilityDisplay.Text = "label1";
             this.UtilityDisplay.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.UtilityDisplay.Click += new System.EventHandler(this.UtilityDisplay_Click);
             // 
             // SimpleCalculator
             // 
