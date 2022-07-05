@@ -192,11 +192,13 @@ namespace Simple_Calculator
         private void EnterButton_Click(object sender, EventArgs e)
         {
             string[] stringArr = (UtilityDisplay.Text + MainDisplay.Text).Split(' ');
-            //if (stringArr.Length != 3)
-            //{
-            //    UtilityDisplay.Text = stringArr[0] + " =";
-            //    return;
-            //}
+            if (stringArr.Length < 3)
+            {
+                UtilityDisplay.Text = stringArr[0] + " =";
+                result = Double.Parse(stringArr[0]);
+                hasResult = true;
+                return;
+            }
             num1 = stringArr[0];
             operation = stringArr[1];
             num2 = stringArr[2];
@@ -229,7 +231,7 @@ namespace Simple_Calculator
             {
                 if (UtilityDisplay.Text.Length > 0 && result == 0)
                 {
-                    initResult = Calculate(UtilityDisplay.Text + MainDisplay.Text);
+                    initResult = Calculate(UtilityDisplay.Text.Replace('=', '+') + MainDisplay.Text);
                     UtilityDisplay.Text = initResult.ToString() + " + ";
                     MainDisplay.Text = initResult.ToString();
 
@@ -257,7 +259,7 @@ namespace Simple_Calculator
             {
                 if (UtilityDisplay.Text.Length > 0 && result == 0)
                 {
-                    initResult = Calculate(UtilityDisplay.Text + MainDisplay.Text);
+                    initResult = Calculate(UtilityDisplay.Text.Replace('=', '-') + MainDisplay.Text);
                     UtilityDisplay.Text = initResult.ToString() + " - ";
                     MainDisplay.Text = initResult.ToString();
 
@@ -289,7 +291,7 @@ namespace Simple_Calculator
             {
                 if (UtilityDisplay.Text.Length > 0 && !hasResult)
                 {
-                    initResult = Calculate(UtilityDisplay.Text + MainDisplay.Text);
+                    initResult = Calculate(UtilityDisplay.Text.Replace('=', '*') + MainDisplay.Text);
                     UtilityDisplay.Text = initResult.ToString() + " × ";
                     MainDisplay.Text = initResult.ToString();
 
@@ -321,7 +323,7 @@ namespace Simple_Calculator
             {
                 if (UtilityDisplay.Text.Length > 0 && result == 0)
                 {
-                    initResult = Calculate(UtilityDisplay.Text + MainDisplay.Text);
+                    initResult = Calculate(UtilityDisplay.Text.Replace('=', '/') + MainDisplay.Text);
                     UtilityDisplay.Text = initResult.ToString() + " ÷ ";
                     MainDisplay.Text = initResult.ToString();
                 }
@@ -418,6 +420,7 @@ namespace Simple_Calculator
         {
             UtilityDisplay.Text = null;
             MainDisplay.Text = null;
+            result = 0;
             hasResult = false;
         }
 
